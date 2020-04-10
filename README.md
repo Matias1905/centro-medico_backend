@@ -16,19 +16,134 @@ Usamos una base de datos SQL con el siguiente formato.
 
 URL: `localhost:8000/api`
 
+***
 
-#### Insertar Médico
 
-`POST` - `/insertarMedico`
+#### Verificar Usuario
 
-Inserta un médico en la base de datos.
+`POST` - `/verificarUsuario`
+
+Verifica las credenciales de un usuario para su login en el sistema.
 
 * **Parámetros**
 
-`nombre`, `username`, `password`, `nro_socio`, `genero`
+`username`, `password`
 
 * **Devuelve**
 
-En caso de terminar correctamente, el método devuelve un código `201: Created` y el objeto creado como se encuentra en la base de datos.
-En caso de error, el método devuelve un código `400: Bad Request` y el mensaje de error correspondiente.
+Mensaje de éxito: `200 - OK` - `{medico: Medico || null, paciente: Paciente || null}`
+
+Mensaje de error: `404 - Not found`
+
+***
+
+#### Obtener turnos del paciente
+
+`POST`- `/getTurnosPaciente`
+
+Devuelve la lista de turnos solicitados por un paciente determinado.
+
+* **Parámetros**
+
+`paciente_id`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK` - `{turnos: Turno[]}`
+
+Mensaje de error: `404 - Not found`
+
+***
+
+#### Pedir turno
+
+`POST`- `/pedirTurno`
+
+Genera la conexión entre un turno y un paciente.
+
+* **Parámetros**
+
+`turno_id`,`paciente_id`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK`
+
+Mensaje de error: `404 - Not found`
+
+***
+
+#### Confirmar turno
+
+`POST`- `/confirmarTurno`
+
+Cambia el estado de un turno determinado a "confirmado".
+
+* **Parámetros**
+
+`turno_id`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK`
+
+Mensaje de error: `404 - Not found`
+
+***
+
+#### Cancelar turno
+
+`POST`- `/cancelarTurno`
+
+Cambia el estado de un turno determinado a "cancelado".
+
+* **Parámetros**
+
+`turno_id`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK`
+
+Mensaje de error: `404 - Not found`
+
+***
+
+#### Obtener turnos de una Especialidad
+
+`POST`- `/getTurnosEspecialidad`
+
+Devuelve la lista de turnos asignados a una Especialidad determinada.
+
+* **Parámetros**
+
+`titulo`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK` - `{turnos: Turno[]}`
+
+Mensaje de error: `404 - Not found` - `{message: "Especialidad no encontrada"}`
+
+***
+
+#### Obtener médicos de una Especialidad
+
+`POST`- `/getMedicosEspecialidad`
+
+Devuelve la lista de médicos asignados a una Especialidad determinada.
+
+* **Parámetros**
+
+`título`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK` - `{turnos: Turno[]}`
+
+Mensaje de error: `404 - Not found` - `{message: "Especialidad no encontrada"}`
+
+***
+
+
 

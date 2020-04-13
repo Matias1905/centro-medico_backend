@@ -145,5 +145,24 @@ Mensaje de error: `404 - Not found` - `{message: "Especialidad no encontrada"}`
 
 ***
 
+#### Generar Jornada de trabajo de un médico
+
+`POST`- `/generarJornada`
+
+Genera la lista de turnos de una jornada de trabajo de un médico. Recibe el día, el horario de entrada y el horario de salida.
+
+* **Parámetros**
+
+`fecha_inicio`, `fecha_fin`, `sede`, `medico_id`, `especialidad_id`
+
+Las fechas deben ingresarse en el formato: `YYYY-MM-DDThh:mm:00.000Z`
+
+* **Devuelve**
+
+Mensaje de éxito: `201 - Created` - `{turnos: Turno[]}`
+
+Mensaje de error: `400 - Bad Request`
+
+***
 
 

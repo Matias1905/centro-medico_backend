@@ -1,36 +1,6 @@
-const { Medico, Paciente, Turno, Especialidad, Jornada } = require('../models');
+const { Medico, Paciente, Turno, Especialidad, Jornada, Usuario } = require('../models');
 
 module.exports = {
-    verificarUsuario(req, res) {
-        const paciente = Paciente.findOne({
-            where: {
-                username: req.body.username,
-                password: req.body.password
-            }
-        })
-
-        const medico = Medico.findOne({
-            where: {
-                username: req.body.username,
-                password: req.body.password
-            }
-        })
-
-        Promise.all([paciente, medico]).then(responses => {
-            if (!responses[0] && !responses[1]) {
-                return res.status(404).send({ message: 'Usuario no encontrado' })
-            } else if (!responses[1]) {
-                console.log(responses[1])
-                return res.status(200).send({ paciente: responses[0], medico: null })
-            } else if (!responses[0]) {
-                return res.status(200).send({ paciente: null, medico: responses[1] })
-            } else {
-                return res.status(200).send({ paciente: responses[0], medico: responses[1] })
-            }
-        }).catch(err => res.status(400).send(err))
-    },
-
-
 
     getTurnosPaciente(req, res) {
         return Paciente.findByPk(req.body.paciente_id).then(paciente => {
@@ -40,10 +10,15 @@ module.exports = {
             return paciente.getTurnos({
                 include: [{
                     model: Medico,
-                    as: 'medico'
+                    as: 'medico',
+                    include: {
+                        model: Usuario,
+                        as: 'datos'
+                    }
                 }, {
                     model: Especialidad,
-                    as: 'especialidad'
+                    as: 'especialidad',
+                    attributes: ['titulo']
                 }]
             }).then(turnos => {
                 if (!turnos) {
@@ -87,7 +62,7 @@ module.exports = {
         }).then(esp => {
 
             if (!esp) {
-                return res.status(404).send({ message: "Especialidad no encontrada"})
+                return res.status(404).send({ message: "Especialidad no encontrada" })
             }
             return esp.getTurnos({
                 where: {
@@ -95,35 +70,43 @@ module.exports = {
                 },
                 include: [{
                     model: Medico,
-                    as: 'medico'
+                    as: 'medico',
+                    include: {
+                        model: Usuario,
+                        as: 'datos'
+                    }
                 }, {
                     model: Especialidad,
-                    as: 'especialidad'
+                    as: 'especialidad',
+                    attributes: ['titulo']
                 }]
             }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
         }).catch(err => res.status(400).send(err))
     },
 
-    getMedicosEspecialidad(req, res){
+    getMedicosEspecialidad(req, res) {
         return Especialidad.findOne({
             where: {
                 titulo: req.body.titulo
             }
         }).then(esp => {
-            if(!esp){
-                return res.status(404).send({message: 'Especialidad no encontrada'})
+            if (!esp) {
+                return res.status(404).send({ message: 'Especialidad no encontrada' })
             }
             return esp.getMedicos({
                 include: [{
                     model: Turno,
                     as: 'turnos'
+                }, {
+                    model: Usuario,
+                    as: 'datos'
                 }]
             }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
         }).catch(err => res.status(400).send(err))
-    }, 
-    
+    },
 
-    cancelarTurno(req, res){
+
+    cancelarTurno(req, res) {
         Turno.update({
             paciente_id: null,
             estado: 'En espera'

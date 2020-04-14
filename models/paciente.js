@@ -1,12 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Paciente = sequelize.define('Paciente', {
-    nombre: DataTypes.STRING,
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    nro_socio: DataTypes.STRING,
-    fecha_nac: DataTypes.DATE,
-    genero: DataTypes.STRING,
     es_deudor: DataTypes.BOOLEAN
   }, {});
   Paciente.associate = function(models) {
@@ -14,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     Paciente.hasMany(models.Turno, {
       foreignKey: 'paciente_id',
       as: 'turnos'
+    })
+
+    Paciente.belongsTo(models.Usuario, {
+      foreignKey: 'usuario_id',
+      as: 'datos'
     })
   };
   return Paciente;

@@ -1,4 +1,4 @@
-const { medico, paciente, jornada, turno, main, agenda } = require('../controllers')
+const { medico, paciente, jornada, turno, main, agenda, usuario } = require('../controllers')
 
 module.exports = (app) => {
     app.get('/api', (req, res) => {
@@ -21,15 +21,20 @@ module.exports = (app) => {
 
 
     //ENDPOINTS REQUIRED BY FRONT-END APP
-    app.post('/api/verificarUsuario', main.verificarUsuario) //Tested!
+    app.post('/api/verificarUsuario', usuario.verificarUsuario)
+    app.post('/api/verificarCuenta', usuario.verificarCuenta)
+    app.post('/api/updatePassword', usuario.updatePassword)
+
+
+
     app.post('/api/getTurnosPaciente', main.getTurnosPaciente)  //Tested!
     app.post('/api/pedirTurno', main.pedirTurno)  //Tested!
     app.post('/api/confirmarTurno', main.confirmarTurno)  //Tested!
     app.post('/api/getTurnosEspecialidad', main.getTurnosEspecialidad)  //Tested!
-    app.post('/api/getMedicosEspecialidad', main.getMedicosEspecialidad)
+    app.post('/api/getMedicosEspecialidad', main.getMedicosEspecialidad) //Tested!
     app.post('/api/cancelarTurno', main.cancelarTurno)
 
 
     //ENDPOINTS AGENDA
-    app.post('/api/generarJornada', agenda.generarJornada)  //Tested! (falta resolver las fechas)
+    app.post('/api/generarJornada', agenda.generarJornada)  //Tested!
 }

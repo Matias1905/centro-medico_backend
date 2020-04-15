@@ -18,7 +18,6 @@ URL: `localhost:8000/api`
 
 ***
 
-
 #### Verificar Usuario
 
 `POST` - `/verificarUsuario`
@@ -27,11 +26,47 @@ Verifica las credenciales de un usuario para su login en el sistema.
 
 * **Parámetros**
 
-`username`, `password`
+`email`, `password`
 
 * **Devuelve**
 
-Mensaje de éxito: `200 - OK` - `{medico: Medico || null, paciente: Paciente || null}`
+Mensaje de éxito: `200 - OK` - `{usuario: Usuario}`
+
+Mensaje de error: `404 - Not found`
+
+***
+
+#### Verificar Cuenta
+
+`POST` - `/verificarCuenta`
+
+Verifica las credenciales de un usuario para su login en el sistema.
+
+* **Parámetros**
+
+`email`, `dni`, `nro_socio`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK`
+
+Mensaje de error: `404 - Not found`
+
+***
+
+#### Cambiar contraseña
+
+`POST` - `/updatePassword`
+
+Permite actualizar la contraseña del usuario en caso de necesitarlo.
+
+* **Parámetros**
+
+`usuario_id`, `password`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK` - `{usuario: Usuario}`
 
 Mensaje de error: `404 - Not found`
 
@@ -164,5 +199,7 @@ Mensaje de éxito: `201 - Created` - `{turnos: Turno[]}`
 Mensaje de error: `400 - Bad Request`
 
 ***
+
+
 
 

@@ -1,4 +1,4 @@
-const {Turno, Medico, Especialidad, Paciente} = require('../models')
+const {Turno, Medico, Especialidad, Paciente, Usuario} = require('../models')
 
 module.exports = {
     create(req, res){
@@ -26,7 +26,12 @@ module.exports = {
             },{
                 model: Paciente,
                 as: 'paciente',
-                attributes: ['nombre', 'nro_socio', 'genero', 'fecha_nac', 'es_deudor']
+                attributes: ['es_deudor'],
+                include: [{
+                    model: Usuario,
+                    as: 'datos',
+                    attributes: ['nombre', 'nro_socio', 'genero', 'fecha_nac']
+                }]
             }]
         }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
     }

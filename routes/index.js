@@ -37,4 +37,5 @@ module.exports = (app) => {
 
     //ENDPOINTS AGENDA
     app.post('/api/generarJornada', agenda.generarJornada)  //Tested!
+    app.post('/api/generarJornadaSemanal', agenda.generarJornadaPorSemana) //Tested!
 }

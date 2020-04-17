@@ -200,6 +200,22 @@ Mensaje de error: `400 - Bad Request`
 
 ***
 
+#### Generar Jornada de un médico semanalmente
 
+`POST`- `/generarJornada`
 
+Genera la lista de turnos de una lista de jornadas de un médico. Las jornadas se crean cada 7 días, desde la fecha de inicio especificada, por el resto del mes seleccionado.
 
+* **Parámetros**
+
+`fecha_inicio`, `fecha_fin`, `sede`, `medico_id`, `especialidad_id`
+
+Las fechas deben ingresarse en el formato: `YYYY-MM-DDThh:mm:00.000Z`
+
+* **Devuelve**
+
+Mensaje de éxito: `201 - Created` - `{turnos: Turno[]}`
+
+Mensaje de error: `400 - Bad Request`
+
+***

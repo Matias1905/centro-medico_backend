@@ -18,7 +18,12 @@ module.exports = {
             include: [{
                 model: Medico,
                 as: 'medico',
-                attributes: ['nombre', 'nro_socio', 'genero']
+                attributes: ['id', 'nro_matricula'],
+                include: [{
+                    model: Usuario,
+                    as: 'datos',
+                    attributes: ['nombre', 'nro_socio', 'genero', 'fecha_nac']
+                }]
             },{
                 model: Especialidad,
                 as: 'especialidad',
@@ -26,7 +31,7 @@ module.exports = {
             },{
                 model: Paciente,
                 as: 'paciente',
-                attributes: ['es_deudor'],
+                attributes: ['id', 'es_deudor'],
                 include: [{
                     model: Usuario,
                     as: 'datos',

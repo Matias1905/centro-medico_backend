@@ -1,4 +1,4 @@
-const { medico, paciente, jornada, turno, main, agenda, usuario } = require('../controllers')
+const { medico, paciente, jornada, turno, main, agenda, usuario, turnospaciente } = require('../controllers')
 
 module.exports = (app) => {
     app.get('/api', (req, res) => {
@@ -33,6 +33,8 @@ module.exports = (app) => {
     app.post('/api/getTurnosEspecialidad', main.getTurnosEspecialidad)  //Tested!
     app.post('/api/getMedicosEspecialidad', main.getMedicosEspecialidad) //Tested!
     app.post('/api/cancelarTurno', main.cancelarTurno)
+
+    app.post('/api/getTurnosActivosPaciente', turnospaciente.getTurnosActivosPaciente)
 
 
     //ENDPOINTS AGENDA

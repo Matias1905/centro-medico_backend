@@ -17,21 +17,21 @@ module.exports = {
     */
 
       return Promise.all([
-        queryInterface.addColumn('medicos', 'usuario_id', {
+        queryInterface.addColumn('Medicos', 'usuario_id', {
           type: Sequelize.INTEGER,
           references: {
             model: 'Usuarios',
             key: 'id'
           }
         }),
-        queryInterface.addColumn('medicos', 'nro_matricula', {
+        queryInterface.addColumn('Medicos', 'nro_matricula', {
           type: Sequelize.STRING
         }),
-        queryInterface.removeColumn('medicos', 'nombre'),
-        queryInterface.removeColumn('medicos', 'username'),
-        queryInterface.removeColumn('medicos', 'password'),
-        queryInterface.removeColumn('medicos', 'nro_socio'),
-        queryInterface.removeColumn('medicos', 'genero')
+        queryInterface.removeColumn('Medicos', 'nombre'),
+        queryInterface.removeColumn('Medicos', 'username'),
+        queryInterface.removeColumn('Medicos', 'password'),
+        queryInterface.removeColumn('Medicos', 'nro_socio'),
+        queryInterface.removeColumn('Medicos', 'genero')
       ])
   },
 
@@ -44,13 +44,13 @@ module.exports = {
       return queryInterface.dropTable('users');
     */
     return Promise.all([
-      queryInterface.removeColumn('medicos', 'usuario_id'),
-      queryInterface.removeColumn('medicos', 'nro_matricula'),
-      queryInterface.addColumn('medicos', 'nombre', { type: Sequelize.STRING }),
-      queryInterface.addColumn('medicos', 'username', { type: Sequelize.STRING }),
-      queryInterface.addColumn('medicos', 'password', { type: Sequelize.STRING }),
-      queryInterface.addColumn('medicos', 'nro_socio', { type: Sequelize.STRING }),
-      queryInterface.addColumn('medicos', 'genero', { type: Sequelize.STRING })
+      queryInterface.removeColumn('Medicos', 'usuario_id'),
+      queryInterface.removeColumn('Medicos', 'nro_matricula'),
+      queryInterface.addColumn('Medicos', 'nombre', { type: Sequelize.STRING }),
+      queryInterface.addColumn('Medicos', 'username', { type: Sequelize.STRING }),
+      queryInterface.addColumn('Medicos', 'password', { type: Sequelize.STRING }),
+      queryInterface.addColumn('Medicos', 'nro_socio', { type: Sequelize.STRING }),
+      queryInterface.addColumn('Medicos', 'genero', { type: Sequelize.STRING })
     ])
   }
 };

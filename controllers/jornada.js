@@ -6,6 +6,7 @@ module.exports = {
             fecha_inicio: req.body.fecha_inicio,
             fecha_fin: req.body.fecha_fin,
             sede: req.body.sede,
+            estado: req.body.estado,
             medico_id: req.body.medico_id,
             especialidad_id: req.body.especialidad_id
         }).then(obj => res.status(201).send(obj)).catch(err => res.status(400).send(err))

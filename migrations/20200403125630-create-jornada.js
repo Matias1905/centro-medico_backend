@@ -17,6 +17,9 @@ module.exports = {
       sede: {
         type: Sequelize.STRING
       },
+      estado: {
+        type: Sequelize.STRING
+      },
       medico_id:{
         type: Sequelize.INTEGER,
         references: {

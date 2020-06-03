@@ -27,6 +27,9 @@ module.exports = {
         queryInterface.addColumn('Medicos', 'nro_matricula', {
           type: Sequelize.STRING
         }),
+        queryInterface.addColumn('Medicos', 'foto_carnet', {
+          type: Sequelize.STRING
+        }),
         queryInterface.removeColumn('Medicos', 'nombre'),
         queryInterface.removeColumn('Medicos', 'username'),
         queryInterface.removeColumn('Medicos', 'password'),
@@ -46,6 +49,7 @@ module.exports = {
     return Promise.all([
       queryInterface.removeColumn('Medicos', 'usuario_id'),
       queryInterface.removeColumn('Medicos', 'nro_matricula'),
+      queryInterface.removeColumn('Medicos', 'foto_carnet'),
       queryInterface.addColumn('Medicos', 'nombre', { type: Sequelize.STRING }),
       queryInterface.addColumn('Medicos', 'username', { type: Sequelize.STRING }),
       queryInterface.addColumn('Medicos', 'password', { type: Sequelize.STRING }),

@@ -50,7 +50,8 @@ module.exports = {
             fecha_fin: dFin,
             sede: req.body.sede,
             medico_id: req.body.medico_id,
-            especialidad_id: req.body.especialidad_id
+            especialidad_id: req.body.especialidad_id,
+            estado: "disponible"
         }).then(jor => {
             let turnos = horarios.map((horaIni) => {
                 let horaFin = new Date(horaIni)
@@ -82,7 +83,8 @@ module.exports = {
                 fecha_fin: dia.fecha_fin,
                 sede: req.body.sede,
                 medico_id: req.body.medico_id,
-                especialidad_id: req.body.especialidad_id
+                especialidad_id: req.body.especialidad_id,
+                estado: "disponible"
             }
         })
 

@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const Jornada = sequelize.define('Jornada', {
     fecha_inicio: DataTypes.DATE,
     fecha_fin: DataTypes.DATE,
-    sede: DataTypes.STRING
+    sede: DataTypes.STRING,
+    estado: DataTypes.STRING
   }, {});
   Jornada.associate = function (models) {
     // associations can be defined here

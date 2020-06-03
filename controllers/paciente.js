@@ -17,7 +17,10 @@ module.exports = {
         }).then(response => {
             Paciente.create({
                 usuario_id: response[0].dataValues.id,
-                es_deudor: req.body.es_deudor
+                es_deudor: req.body.es_deudor,
+                obra_social: req.body.obra_social,
+                plan: req.body.plan,
+                os_nro: req.body.os_nro
             }).then(obj => res.status(201).send(obj))
             .catch(err => res.status(400).send(err))
         }).catch(err => res.status(400).send(err))

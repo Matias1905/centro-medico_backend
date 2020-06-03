@@ -1,7 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Medico = sequelize.define('Medico', {
-    nro_matricula: DataTypes.STRING
+    nro_matricula: DataTypes.STRING,
+    foto_carnet: DataTypes.STRING
   }, {});
   Medico.associate = function(models) {
     // associations can be defined here

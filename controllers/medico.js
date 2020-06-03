@@ -17,7 +17,8 @@ module.exports = {
         }).then(response => {
             Medico.create({
                 usuario_id: response[0].dataValues.id,
-                nro_matricula: req.body.nro_matricula
+                nro_matricula: req.body.nro_matricula,
+                foto_carnet: req.body.foto_carnet
             }).then(obj => res.status(201).send(obj))
             .catch(err => res.status(400).send(err))
         }).catch(err => res.status(400).send(err))

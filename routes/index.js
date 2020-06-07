@@ -21,23 +21,27 @@ module.exports = (app) => {
 
 
     //ENDPOINTS REQUIRED BY FRONT-END APP
-    app.post('/api/verificarUsuario', usuario.verificarUsuario)
-    app.post('/api/verificarCuenta', usuario.verificarCuenta)
-    app.post('/api/updatePassword', usuario.updatePassword)
+    app.post('/api/verificarUsuario', usuario.verificarUsuario)                         //Tested!
+    app.post('/api/verificarCuenta', usuario.verificarCuenta)                           //Tested!
+    app.post('/api/updatePassword', usuario.updatePassword)                             //Tested!
 
 
 
-    app.post('/api/getTurnosPaciente', main.getTurnosPaciente)  //Tested!
-    app.post('/api/pedirTurno', main.pedirTurno)  //Tested!
-    app.post('/api/confirmarTurno', main.confirmarTurno)  //Tested!
-    app.post('/api/getTurnosEspecialidad', main.getTurnosEspecialidad)  //Tested!
-    app.post('/api/getMedicosEspecialidad', main.getMedicosEspecialidad) //Tested!
-    app.post('/api/cancelarTurno', main.cancelarTurno)
+    app.post('/api/getTurnosPaciente', main.getTurnosPaciente)                          //Tested!
+    app.post('/api/pedirTurno', main.pedirTurno)                                        //Tested!
+    app.post('/api/confirmarTurno', main.confirmarTurno)                                //Tested!
+    app.post('/api/getMedicosEspecialidad', main.getMedicosEspecialidad)                //Tested!
+    app.post('/api/cancelarTurno', main.cancelarTurno)                                  //Tested!
 
-    app.post('/api/getTurnosActivosPaciente', turnospaciente.getTurnosActivosPaciente)
+    app.post('/api/getTurnosActivosPaciente', turnospaciente.getTurnosActivosPaciente)  //Tested!
+    app.post('/api/getHistorialPaciente', turnospaciente.getTurnosHistorialPaciente)    //Tested!
 
+    app.post('/api/getTurnos', main.getTurnos)                                          //Tested!
+    app.post('/api/getJornadasMedico', medico.getJornadasMedico)                        //Tested!
 
     //ENDPOINTS AGENDA
-    app.post('/api/generarJornada', agenda.generarJornada)  //Tested!
-    app.post('/api/generarJornadaSemanal', agenda.generarJornadaPorSemana) //Tested!
+    app.post('/api/generarJornada', agenda.generarJornada)                              //Tested!
+    app.post('/api/generarJornadaSemanal', agenda.generarJornadaPorSemana)              //Tested!
+
+    //FALTAN METODOS DE AGREGAR Y ELIMINAR TURNOS (modificar agenda)
 }

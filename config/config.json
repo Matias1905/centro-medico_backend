@@ -4,16 +4,14 @@
     "password": "123456",
     "database": "centro_medico",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "operatorsAliases": false
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": "123456",
     "database": "centro_medico",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "operatorsAliases": false
+    "dialect": "mysql"
   },
   "production": {
     "use_env_variable": "DATABASE_URL"

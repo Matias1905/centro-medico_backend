@@ -8,7 +8,7 @@
 
 Usamos una base de datos SQL con el siguiente formato.
 
-
+(https://raw.githubusercontent/Matias1905/centro-medico-backend/master/diagrama_bd.png)
 
 ***
 
@@ -144,21 +144,21 @@ Mensaje de error: `404 - Not found`
 
 ***
 
-#### Obtener turnos de una Especialidad
+#### Obtener turnos
 
-`POST`- `/getTurnosEspecialidad`
+`POST`- `/getTurnos`
 
-Devuelve la lista de turnos asignados a una Especialidad determinada.
+Devuelve los turnos que estén disponibles según varios filtros: especialidad (requerido), médico y fecha.
 
 * **Parámetros**
 
-`titulo`
+`especialidad_id` - `medico_id` - `fecha`
 
 * **Devuelve**
 
 Mensaje de éxito: `200 - OK` - `{turnos: Turno[]}`
 
-Mensaje de error: `404 - Not found` - `{message: "Especialidad no encontrada"}`
+Mensaje de error: `404 - Not found`
 
 ***
 
@@ -219,3 +219,22 @@ Mensaje de éxito: `201 - Created` - `{turnos: Turno[]}`
 Mensaje de error: `400 - Bad Request`
 
 ***
+
+#### Obtener Jornadas de un médico
+
+`POST` - `/getJornadasMedico`
+
+Devuelve la lista de Jornadas de un médico, que contienen los turnos de éste organizados según el día.
+
+* **Parámetros**
+
+`medico_id`
+
+* **Devuelve**
+
+Mensaje de éxito: `200 - OK` - `{jornadas: Jornada[]}`
+
+Mensaje de error: `404 - Not found`
+
+***
+

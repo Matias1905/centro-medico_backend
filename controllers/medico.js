@@ -70,5 +70,28 @@ module.exports = {
                         .catch(err => res.status(400).send(err))
                 }).catch(err => res.status(400).send(err))
             }).catch(err => res.status(400).send(err))
-    }
+    },
+
+    getJornadasMedico(req, res){
+        return Medico.findByPk(req.body.medico_id).then(medico => {
+            return medico.getJornadas({
+                include: [{
+                        model: Turno,
+                        as: 'turnos',
+                        attributes: ['fecha_inicio', 'fecha_fin', 'sede', 'estado']
+                    },{
+                        model: Especialidad,
+                        as: 'especialidad',
+                        attributes: ['titulo']
+                    }]
+            }).then(jornadas => {
+                if (!jornadas) {
+                    return res.status(404).send({ message: 'Ha ocurrido un error' })
+                }
+                return res.status(200).send(jornadas)
+            }).catch(err => res.status(404).send(err))
+        }).catch(err => res.status(404).send(err))
+    },
+
+    
 }

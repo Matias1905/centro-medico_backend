@@ -8,7 +8,7 @@
 
 Usamos una base de datos SQL con el siguiente formato.
 
-(https://raw.githubusercontent/Matias1905/centro-medico-backend/master/diagrama_bd.png)
+![Diagrama de Base de Datos](diagrama_bd.png)
 
 ***
 

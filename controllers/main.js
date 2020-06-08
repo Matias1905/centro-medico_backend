@@ -11,6 +11,10 @@ function formatFecha(fecha){
 
 module.exports = {
 
+    getEspecialidades(req, res){
+        return Especialidad.findAll().then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
+    },
+
     getTurnosPaciente(req, res) {
         return Paciente.findByPk(req.body.paciente_id).then(paciente => {
             if (!paciente) {

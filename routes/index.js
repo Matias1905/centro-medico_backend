@@ -26,7 +26,7 @@ module.exports = (app) => {
     app.post('/api/updatePassword', usuario.updatePassword)                             //Tested!
 
 
-
+    app.get('/api/getEspecialidades', main.getEspecialidades)                           //Tested!
     app.post('/api/getTurnosPaciente', main.getTurnosPaciente)                          //Tested!
     app.post('/api/pedirTurno', main.pedirTurno)                                        //Tested!
     app.post('/api/confirmarTurno', main.confirmarTurno)                                //Tested!

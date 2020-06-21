@@ -20,7 +20,7 @@ module.exports = {
                 nro_matricula: req.body.nro_matricula,
                 foto_carnet: req.body.foto_carnet
             }).then(obj => res.status(201).send(obj))
-            .catch(err => res.status(400).send(err))
+                .catch(err => res.status(400).send(err))
         }).catch(err => res.status(400).send(err))
     },
 
@@ -30,7 +30,7 @@ module.exports = {
                 model: Usuario,
                 as: 'datos',
                 attributes: ['nombre', 'email', 'nro_socio', 'genero']
-            },{
+            }, {
                 model: Especialidad,
                 as: 'especialidades',
                 attributes: ['titulo'],
@@ -72,18 +72,21 @@ module.exports = {
             }).catch(err => res.status(400).send(err))
     },
 
-    getJornadasMedico(req, res){
+    getJornadasMedico(req, res) {
         return Medico.findByPk(req.body.medico_id).then(medico => {
             return medico.getJornadas({
                 include: [{
-                        model: Turno,
-                        as: 'turnos',
-                        attributes: ['fecha_inicio', 'fecha_fin', 'sede', 'estado']
-                    },{
-                        model: Especialidad,
-                        as: 'especialidad',
-                        attributes: ['titulo']
-                    }]
+                    model: Turno,
+                    as: 'turnos',
+                    attributes: ['fecha_inicio', 'fecha_fin', 'sede', 'estado']
+                }, {
+                    model: Especialidad,
+                    as: 'especialidad',
+                    attributes: ['titulo']
+                }],
+                order: [
+                    [{ model: Turno, as: 'turnos' }, 'fecha_inicio', 'asc']
+                ]
             }).then(jornadas => {
                 if (!jornadas) {
                     return res.status(404).send({ message: 'Ha ocurrido un error' })
@@ -93,5 +96,5 @@ module.exports = {
         }).catch(err => res.status(404).send(err))
     },
 
-    
+
 }

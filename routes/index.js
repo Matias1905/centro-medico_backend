@@ -43,5 +43,6 @@ module.exports = (app) => {
     app.post('/api/generarJornada', agenda.generarJornada)                              //Tested!
     app.post('/api/generarJornadaSemanal', agenda.generarJornadaPorSemana)              //Tested!
 
-    //FALTAN METODOS DE AGREGAR Y ELIMINAR TURNOS (modificar agenda)
+    app.post('/api/agregarTurnos', agenda.agregarTurnos)                                //Tested!
+    app.post('/api/eliminarTurnos', agenda.eliminarTurnos)                              //Tested!
 }

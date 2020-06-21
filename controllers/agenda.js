@@ -1,19 +1,33 @@
-const { Jornada, Turno, Medico, Especialidad, Paciente } = require('../models')
+const { Op } = require('sequelize')
+const { Jornada, Turno, Medico, Especialidad, Paciente } = require('../models');
+const jornada = require('./jornada');
 
-function fraccionarHorario(inicio, fin) {
+const duracionTurnos = 30;
+
+function fraccionarHorario(inicio, fin, almuerzo) {
     let horarios = [];
 
     let dInicio = new Date(inicio)
     let dFin = new Date(fin)
 
+
     let d = new Date(dInicio)
     while (dInicio < dFin) {
         d = new Date(dInicio)
         horarios.push(d)
-        dInicio.setMinutes(dInicio.getMinutes() + 30)
+        dInicio.setMinutes(dInicio.getMinutes() + duracionTurnos)
     }
 
-    return horarios
+    if (almuerzo) {
+        let hAlmuerzo1 = new Date(almuerzo)
+        let hAlmuerzo2 = new Date(almuerzo)
+        hAlmuerzo2.setMinutes(hAlmuerzo2.getMinutes() + duracionTurnos)
+
+        const array = horarios.filter(horario => horario.getTime() !== hAlmuerzo2.getTime() && horario.getTime() !== hAlmuerzo1.getTime())
+        return array
+    } else {
+        return horarios
+    }
 }
 
 function generarDiasJornada(inicio, fin) {
@@ -38,7 +52,7 @@ function generarDiasJornada(inicio, fin) {
 module.exports = {
 
     generarJornada(req, res) {
-        let horarios = fraccionarHorario(req.body.fecha_inicio, req.body.fecha_fin)
+        let horarios = fraccionarHorario(req.body.fecha_inicio, req.body.fecha_fin, req.body.horario_almuerzo ? req.body.horario_almuerzo : null)
 
         let dInicio = new Date(req.body.fecha_inicio)
         let dFin = new Date(req.body.fecha_fin)
@@ -55,7 +69,7 @@ module.exports = {
         }).then(jor => {
             let turnos = horarios.map((horaIni) => {
                 let horaFin = new Date(horaIni)
-                horaFin.setMinutes(horaIni.getMinutes() + 30)
+                horaFin.setMinutes(horaIni.getMinutes() + duracionTurnos)
 
                 return {
                     fecha_inicio: horaIni,
@@ -97,7 +111,7 @@ module.exports = {
 
                 let turnosDia = horarios.map((horaIni) => {
                     let horaFin = new Date(horaIni)
-                    horaFin.setMinutes(horaIni.getMinutes() + 30)
+                    horaFin.setMinutes(horaIni.getMinutes() + duracionTurnos)
 
                     return {
                         fecha_inicio: horaIni,
@@ -114,5 +128,58 @@ module.exports = {
 
             Turno.bulkCreate(turnos, { returning: true }).then(obj => res.status(201).send(obj)).catch(err => res.status(400).send(err))
         }).catch(err => res.status(400).send(err))
+    },
+
+    agregarTurnos(req, res) {
+        return Jornada.findByPk(req.body.jornada_id).then(jornada => {
+            let turnos = req.body.horarios.map((horario) => {
+                let horaIni = new Date(horario)
+                let horaFin = new Date(horaIni)
+                horaFin.setMinutes(horaIni.getMinutes() + duracionTurnos)
+
+                return {
+                    fecha_inicio: horaIni,
+                    fecha_fin: horaFin,
+                    sede: jornada.sede,
+                    medico_id: jornada.medico_id,
+                    especialidad_id: jornada.especialidad_id,
+                    estado: "en espera",
+                    jornada_id: jornada.id
+                }
+            })
+            Turno.bulkCreate(turnos, { returning: true }).then(() => actualizarJornadas(req.body.jornada_id))
+                .then(() => res.sendStatus(201)).catch(err => res.status(400).send(err))
+
+        }).catch(err => res.status(400).send(err))
+    },
+
+    eliminarTurnos(req, res) {
+        return Turno.destroy({
+            where: {
+                jornada_id: req.body.jornada_id,
+                fecha_inicio: {
+                    [Op.in]: req.body.horarios
+                }
+            }
+        }).then(affectedRows => actualizarJornadas(req.body.jornada_id))
+            .then(obj => res.sendStatus(200))
+            .catch(err => res.status(400).send(err))
     }
+}
+
+const actualizarJornadas = async (jornada_id) => {
+    const jornada = await Jornada.findByPk(jornada_id)
+
+    const turnos = await jornada.getTurnos()
+
+    const horarios = turnos.map((turno) => turno.fecha_inicio)
+
+    horarios.sort((a, b) => a.getTime() - b.getTime())
+
+    const fecha_fin = horarios[horarios.length - 1]
+
+    jornada.fecha_inicio = horarios[0]
+    jornada.fecha_fin = fecha_fin.setMinutes(fecha_fin.getMinutes() + duracionTurnos)
+
+    await jornada.save()
 }

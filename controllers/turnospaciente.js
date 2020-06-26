@@ -24,7 +24,8 @@ module.exports = {
                     model: Especialidad,
                     as: 'especialidad',
                     attributes: ['titulo']
-                }]
+                }],
+                order: [['fecha_inicio', 'DESC']]
             }).then(turnos => {
                 if (!turnos) {
                     return res.status(400).send({ message: 'Ha ocurrido un error' })
@@ -56,7 +57,8 @@ module.exports = {
                     model: Especialidad,
                     as: 'especialidad',
                     attributes: ['titulo']
-                }]
+                }],
+                order: [['fecha_inicio', 'DESC']]
             }).then(turnos => {
                 if (!turnos) {
                     return res.status(400).send({ message: 'Ha ocurrido un error' })

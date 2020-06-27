@@ -58,7 +58,8 @@ module.exports = {
 
     pedirTurno(req, res) {
         Turno.update({
-            paciente_id: req.body.paciente_id
+            paciente_id: req.body.paciente_id,
+            estado: 'ocupado'
         }, {
             where: {
                 id: req.body.turno_id
@@ -72,6 +73,18 @@ module.exports = {
     confirmarTurno(req, res) {
         Turno.update({
             estado: "confirmado"
+        }, {
+            where: {
+                id: req.body.turno_id
+            },
+            returning: true
+        }).then(obj => res.status(200).send(obj))
+            .catch(err => res.status(404).send(err))
+    },
+
+    cancelarTurnoCM(req, res){
+        Turno.update({
+            estado: "canceladoCM"
         }, {
             where: {
                 id: req.body.turno_id
@@ -184,7 +197,7 @@ module.exports = {
     cancelarTurno(req, res) {
         Turno.update({
             paciente_id: null,
-            estado: 'En espera'
+            estado: 'disponible'
         }, {
             where: {
                 id: req.body.turno_id

@@ -77,7 +77,7 @@ module.exports = {
                     medico_id: req.body.medico_id,
                     especialidad_id: req.body.especialidad_id,
                     sede: req.body.sede,
-                    estado: "en espera",
+                    estado: "disponible",
                     jornada_id: jor.id
                 }
             })
@@ -119,7 +119,7 @@ module.exports = {
                         sede: req.body.sede,
                         medico_id: req.body.medico_id,
                         especialidad_id: req.body.especialidad_id,
-                        estado: "en espera",
+                        estado: "disponible",
                         jornada_id: jornada.id
                     }
                 })
@@ -143,7 +143,7 @@ module.exports = {
                     sede: jornada.sede,
                     medico_id: jornada.medico_id,
                     especialidad_id: jornada.especialidad_id,
-                    estado: "en espera",
+                    estado: "disponible",
                     jornada_id: jornada.id
                 }
             })
@@ -154,11 +154,12 @@ module.exports = {
     },
 
     eliminarTurnos(req, res) {
+        const horarios = req.body.horarios.map((horario) => new Date(horario))
         return Turno.destroy({
             where: {
                 jornada_id: req.body.jornada_id,
                 fecha_inicio: {
-                    [Op.in]: req.body.horarios
+                    [Op.in]: horarios
                 }
             }
         }).then(affectedRows => actualizarJornadas(req.body.jornada_id))
@@ -172,7 +173,7 @@ const actualizarJornadas = async (jornada_id) => {
 
     const turnos = await jornada.getTurnos()
 
-    const horarios = turnos.map((turno) => turno.fecha_inicio)
+    const horarios = turnos.map((turno) => new Date(turno.fecha_inicio))
 
     horarios.sort((a, b) => a.getTime() - b.getTime())
 

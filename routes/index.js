@@ -33,6 +33,8 @@ module.exports = (app) => {
     app.post('/api/getMedicosEspecialidad', main.getMedicosEspecialidad)                //Tested!
     app.post('/api/cancelarTurno', main.cancelarTurno)                                  //Tested!
 
+    app.post('/api/cancelarTurnoCentroMedico', main.cancelarTurnoCM)                    //Tested!
+
     app.post('/api/getTurnosActivosPaciente', turnospaciente.getTurnosActivosPaciente)  //Tested!
     app.post('/api/getHistorialPaciente', turnospaciente.getTurnosHistorialPaciente)    //Tested!
 

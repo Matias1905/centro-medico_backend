@@ -25,7 +25,7 @@ module.exports = {
                     as: 'especialidad',
                     attributes: ['titulo']
                 }],
-                order: [['fecha_inicio', 'DESC']]
+                order: [['fecha_inicio', 'ASC']]
             }).then(turnos => {
                 if (!turnos) {
                     return res.status(400).send({ message: 'Ha ocurrido un error' })

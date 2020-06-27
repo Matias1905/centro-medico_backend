@@ -16,21 +16,17 @@ module.exports = {
         return Jornada.findAll({
             include: [{
                 model: Turno,
-                as: 'turnos',
-                attributes: ['fecha_inicio', 'fecha_fin', 'sede', 'estado']
+                as: 'turnos'
             }, {
                 model: Medico,
                 as: 'medico',
-                attributes: ['nro_matricula'],
                 include: [{
                     model: Usuario,
-                    as: 'datos',
-                    attributes: ['nombre', 'nro_socio', 'genero']
+                    as: 'datos'
                 }]
             }, {
                 model: Especialidad,
-                as: 'especialidad',
-                attributes: ['titulo']
+                as: 'especialidad'
             }],
 
             order: [

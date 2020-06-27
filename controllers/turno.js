@@ -18,24 +18,19 @@ module.exports = {
             include: [{
                 model: Medico,
                 as: 'medico',
-                attributes: ['id', 'nro_matricula'],
                 include: [{
                     model: Usuario,
-                    as: 'datos',
-                    attributes: ['nombre', 'nro_socio', 'genero', 'fecha_nac']
+                    as: 'datos'
                 }]
             },{
                 model: Especialidad,
-                as: 'especialidad',
-                attributes: ['titulo']
+                as: 'especialidad'
             },{
                 model: Paciente,
                 as: 'paciente',
-                attributes: ['id', 'es_deudor'],
                 include: [{
                     model: Usuario,
-                    as: 'datos',
-                    attributes: ['nombre', 'nro_socio', 'genero', 'fecha_nac']
+                    as: 'datos'
                 }]
             }]
         }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))

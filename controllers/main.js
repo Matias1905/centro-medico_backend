@@ -12,7 +12,21 @@ function formatFecha(fecha){
 module.exports = {
 
     getEspecialidades(req, res){
-        return Especialidad.findAll().then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
+        return Especialidad.findAll({
+            include: [{
+                model: Medico,
+                as: 'medicos',
+                attributes: ['id'],
+                include: {
+                    model: Usuario,
+                    as: 'datos',
+                    attributes: ['nombre']
+                },
+                through: {
+                    attributes: []
+                }
+            }]
+        }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
     },
 
     getTurnosPaciente(req, res) {
@@ -88,100 +102,6 @@ module.exports = {
         }).catch(err => res.status(400).send(err))
     },
 
-    getTurnosPorEspecialidad(req, res){
-        return Turno.findAll({
-            where: {
-                especialidad_id: req.body.especialidad_id,
-                paciente_id: null
-            },
-            include: [{
-                model: Medico,
-                as: 'medico',
-                include: {
-                    model: Usuario,
-                    as: 'datos'
-                }
-            }, {
-                model: Especialidad,
-                as: 'especialidad',
-                attributes: ['titulo']
-            }]
-        }).then(list => res.status(200).send(list)).catch(err => res.status(404).send(err))
-    },
-
-
-    getTurnosPorMedico(req, res){
-        return Turno.findAll({
-            where: {
-                especialidad_id: req.body.especialidad_id,
-                medico_id: req.body.medico_id,
-                paciente_id: null
-            },
-            include: [{
-                model: Medico,
-                as: 'medico',
-                include: {
-                    model: Usuario,
-                    as: 'datos'
-                }
-            }, {
-                model: Especialidad,
-                as: 'especialidad',
-                attributes: ['titulo']
-            }]
-        }).then(list => res.status(200).send(list)).catch(err => res.status(404).send(err))
-    },
-
-    getTurnosPorFecha(req, res){
-        const [fechaInicio, fechaFin] = formatFecha(req.body.fecha)
-        return Turno.findAll({
-            where: {
-                especialidad_id: req.body.especialidad_id,
-                paciente_id: null,
-                fecha_inicio:{
-                    [Op.between]: [fechaInicio, fechaFin]
-                }
-            },
-            include: [{
-                model: Medico,
-                as: 'medico',
-                include: {
-                    model: Usuario,
-                    as: 'datos'
-                }
-            }, {
-                model: Especialidad,
-                as: 'especialidad',
-                attributes: ['titulo']
-            }]
-        }).then(list => res.status(200).send(list)).catch(err => res.status(404).send(err))
-    },
-
-    getTurnosPorFechaYMedico(req, res){
-        const [fechaInicio, fechaFin] = formatFecha(req.body.fecha)
-        return Turno.findAll({
-            where: {
-                especialidad_id: req.body.especialidad_id,
-                medico_id: req.body.medico_id,
-                paciente_id: null,
-                fecha_inicio:{
-                    [Op.between]: [fechaInicio, fechaFin]
-                }
-            },
-            include: [{
-                model: Medico,
-                as: 'medico',
-                include: {
-                    model: Usuario,
-                    as: 'datos'
-                }
-            }, {
-                model: Especialidad,
-                as: 'especialidad',
-                attributes: ['titulo']
-            }]
-        }).then(list => res.status(200).send(list)).catch(err => res.status(404).send(err))
-    },
 
     getTurnos(req, res){
         let condiciones = {}
@@ -193,7 +113,8 @@ module.exports = {
                     medico_id: req.body.medico_id,
                     paciente_id: null,
                     fecha_inicio:{
-                        [Op.between]: [fechaInicio, fechaFin]
+                        [Op.between]: [fechaInicio, fechaFin],
+                        [Op.gte]: new Date()
                     }
                 },
                 include: [{
@@ -216,7 +137,8 @@ module.exports = {
                     especialidad_id: req.body.especialidad_id,
                     paciente_id: null,
                     fecha_inicio:{
-                        [Op.between]: [fechaInicio, fechaFin]
+                        [Op.between]: [fechaInicio, fechaFin],
+                        [Op.gte]: new Date()
                     }
                 }
             }
@@ -225,14 +147,20 @@ module.exports = {
                 where: {
                     especialidad_id: req.body.especialidad_id,
                     medico_id: req.body.medico_id,
-                    paciente_id: null
+                    paciente_id: null,
+                    fecha_inicio: {
+                        [Op.gte]: new Date()
+                    }
                 }
             }
         }else{
             condiciones = {
                 where: {
                     especialidad_id: req.body.especialidad_id,
-                    paciente_id: null
+                    paciente_id: null,
+                    fecha_inicio: {
+                        [Op.gte]: new Date()
+                    }
                 }
             }
         }
@@ -241,13 +169,15 @@ module.exports = {
             as: 'medico',
             include: {
                 model: Usuario,
-                as: 'datos'
+                as: 'datos',
+                attributes: ['id', 'nombre']
             }
         }, {
             model: Especialidad,
             as: 'especialidad',
             attributes: ['titulo']
-        }];
+        }]
+        condiciones.order = [['fecha_inicio', 'ASC']];
         return Turno.findAll(condiciones).then(list => res.status(200).send(list)).catch(err => res.status(404).send(err))
     },
 

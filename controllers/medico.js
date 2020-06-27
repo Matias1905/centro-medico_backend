@@ -28,23 +28,19 @@ module.exports = {
         return Medico.findAll({
             include: [{
                 model: Usuario,
-                as: 'datos',
-                attributes: ['nombre', 'email', 'nro_socio', 'genero']
+                as: 'datos'
             }, {
                 model: Especialidad,
                 as: 'especialidades',
-                attributes: ['titulo'],
                 through: {
                     attributes: []
                 }
             }, {
                 model: Jornada,
-                as: 'jornadas',
-                attributes: ['fecha_inicio', 'fecha_fin', 'sede']
+                as: 'jornadas'
             }, {
                 model: Turno,
-                as: 'turnos',
-                attributes: ['fecha_inicio', 'fecha_fin', 'sede', 'estado']
+                as: 'turnos'
             }]
         }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
     },

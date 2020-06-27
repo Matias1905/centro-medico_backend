@@ -30,12 +30,10 @@ module.exports = {
         return Paciente.findAll({
             include: [{
                 model: Usuario,
-                as: 'datos',
-                attributes: ['nombre', 'email', 'nro_socio', 'genero']
+                as: 'datos'
             },{
                 model: Turno,
-                as: 'turnos',
-                attributes: ['fecha_inicio', 'fecha_fin', 'sede', 'estado']
+                as: 'turnos'
             }]
         }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
     },

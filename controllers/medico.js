@@ -81,6 +81,7 @@ module.exports = {
                     attributes: ['titulo']
                 }],
                 order: [
+                    ['fecha_inicio', 'asc'],
                     [{ model: Turno, as: 'turnos' }, 'fecha_inicio', 'asc']
                 ]
             }).then(jornadas => {

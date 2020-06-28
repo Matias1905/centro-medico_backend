@@ -1,17 +1,17 @@
 const { Op } = require('sequelize')
 const { Medico, Paciente, Turno, Especialidad, Jornada, Usuario } = require('../models');
 
-function formatFecha(fecha){
+function formatFecha(fecha) {
     let fechaInicio = new Date(fecha);
-    fechaInicio.setHours(0,0,0,0);
+    fechaInicio.setHours(0, 0, 0, 0);
     let fechaFin = new Date(fecha);
-    fechaFin.setHours(24,0,0,0)
+    fechaFin.setHours(24, 0, 0, 0)
     return [fechaInicio, fechaFin]
 }
 
 module.exports = {
 
-    getEspecialidades(req, res){
+    getEspecialidades(req, res) {
         return Especialidad.findAll({
             include: [{
                 model: Medico,
@@ -25,7 +25,11 @@ module.exports = {
                 through: {
                     attributes: []
                 }
-            }]
+            }],
+            order: [
+                ['titulo', 'asc'],
+                [{ model: Medico, as: 'medicos' }, { model: Usuario, as: 'datos' }, 'nombre', 'asc']
+            ]
         }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
     },
 
@@ -82,7 +86,7 @@ module.exports = {
             .catch(err => res.status(404).send(err))
     },
 
-    cancelarTurnoCM(req, res){
+    cancelarTurnoCM(req, res) {
         Turno.update({
             estado: "canceladoCM"
         }, {
@@ -116,16 +120,16 @@ module.exports = {
     },
 
 
-    getTurnos(req, res){
+    getTurnos(req, res) {
         let condiciones = {}
-        if(req.body.fecha && req.body.medico_id){
+        if (req.body.fecha && req.body.medico_id) {
             const [fechaInicio, fechaFin] = formatFecha(req.body.fecha)
             condiciones = {
                 where: {
                     especialidad_id: req.body.especialidad_id,
                     medico_id: req.body.medico_id,
                     paciente_id: null,
-                    fecha_inicio:{
+                    fecha_inicio: {
                         [Op.between]: [fechaInicio, fechaFin],
                         [Op.gte]: new Date()
                     }
@@ -143,19 +147,19 @@ module.exports = {
                     attributes: ['titulo']
                 }]
             }
-        }else if(req.body.fecha){
+        } else if (req.body.fecha) {
             const [fechaInicio, fechaFin] = formatFecha(req.body.fecha)
             condiciones = {
                 where: {
                     especialidad_id: req.body.especialidad_id,
                     paciente_id: null,
-                    fecha_inicio:{
+                    fecha_inicio: {
                         [Op.between]: [fechaInicio, fechaFin],
                         [Op.gte]: new Date()
                     }
                 }
             }
-        }else if(req.body.medico_id){
+        } else if (req.body.medico_id) {
             condiciones = {
                 where: {
                     especialidad_id: req.body.especialidad_id,
@@ -166,7 +170,7 @@ module.exports = {
                     }
                 }
             }
-        }else{
+        } else {
             condiciones = {
                 where: {
                     especialidad_id: req.body.especialidad_id,

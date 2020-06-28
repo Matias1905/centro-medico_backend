@@ -1,4 +1,4 @@
-const { Usuario, Medico, Paciente } = require('../models');
+const { Usuario, Medico, Paciente, Especialidad } = require('../models');
 
 module.exports = {
     verificarUsuario(req, res) {
@@ -9,11 +9,21 @@ module.exports = {
             },
             include: [{
                 model: Medico,
-                as: 'medico'
+                as: 'medico',
+                include: {
+                    model: Especialidad,
+                    as: 'especialidades',
+                    through: {
+                        attributes: []
+                    }
+                }
             }, {
                 model: Paciente,
                 as: 'paciente'
-            }]
+            }],
+            order: [
+                [{model: Medico, as: 'medico'},{model:Especialidad, as: 'especialidades'}, 'titulo', 'asc']
+            ]
         }).then(usuario => {
             if (!usuario) {
                 return res.status(404).send({ message: 'Usuario no encontrado' })
@@ -32,11 +42,21 @@ module.exports = {
             },
             include: [{
                 model: Medico,
-                as: 'medico'
+                as: 'medico',
+                include: {
+                    model: Especialidad,
+                    as: 'especialidades',
+                    through: {
+                        attributes: []
+                    }
+                }
             }, {
                 model: Paciente,
                 as: 'paciente'
-            }]
+            }],
+            order: [
+                [{model: Medico, as: 'medico'},{model:Especialidad, as: 'especialidades'}, 'titulo', 'asc']
+            ]
         }).then(usuario => {
             if (!usuario) {
                 return res.status(404).send({ message: 'Usuario no encontrado' })
@@ -58,11 +78,21 @@ module.exports = {
                 return Usuario.findByPk(req.body.usuario_id, {
                     include: [{
                         model: Medico,
-                        as: 'medico'
+                        as: 'medico',
+                        include: {
+                            model: Especialidad,
+                            as: 'especialidades',
+                            through: {
+                                attributes: []
+                            }
+                        }
                     }, {
                         model: Paciente,
                         as: 'paciente'
-                    }]
+                    }],
+                    order: [
+                        [{model: Medico, as: 'medico'},{model:Especialidad, as: 'especialidades'}, 'titulo', 'asc']
+                    ]
                 }).then(user => res.status(200).send(user)).catch(err => res.status(404).send(err))
             }else{
                 return res.status(400).send({message: 'No se pudo actualizar la contraseña'})

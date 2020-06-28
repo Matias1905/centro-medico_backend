@@ -162,8 +162,21 @@ module.exports = {
                     [Op.in]: horarios
                 }
             }
-        }).then(affectedRows => actualizarJornadas(req.body.jornada_id))
-            .then(obj => res.sendStatus(200))
+        }).then(() => actualizarJornadas(req.body.jornada_id))
+            .then(() => res.sendStatus(200))
+            .catch(err => res.status(400).send(err))
+    },
+
+    eliminarTurnosById(req, res) {
+        return Turno.destroy({
+            where: {
+                jornada_id: req.body.jornada_id,
+                id: {
+                    [Op.in]: req.body.turnos
+                }
+            }
+        }).then(() => actualizarJornadas(req.body.jornada_id))
+            .then(() => res.sendStatus(200))
             .catch(err => res.status(400).send(err))
     }
 }

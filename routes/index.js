@@ -27,10 +27,10 @@ module.exports = (app) => {
 
 
     app.get('/api/getEspecialidades', main.getEspecialidades)                           //Tested!
-    app.post('/api/getTurnosPaciente', main.getTurnosPaciente)                          //Tested!
+    app.post('/api/getTurnosPaciente', main.getTurnosPaciente)                          //Tested! (eliminar si no se usa)
     app.post('/api/pedirTurno', main.pedirTurno)                                        //Tested!
     app.post('/api/confirmarTurno', main.confirmarTurno)                                //Tested!
-    app.post('/api/getMedicosEspecialidad', main.getMedicosEspecialidad)                //Tested!
+    app.post('/api/getMedicosEspecialidad', main.getMedicosEspecialidad)                //Tested! (eliminar si no se usa)
     app.post('/api/cancelarTurno', main.cancelarTurno)                                  //Tested!
 
     app.post('/api/cancelarTurnoCentroMedico', main.cancelarTurnoCM)                    //Tested!
@@ -46,5 +46,7 @@ module.exports = (app) => {
     app.post('/api/generarJornadaSemanal', agenda.generarJornadaPorSemana)              //Tested!
 
     app.post('/api/agregarTurnos', agenda.agregarTurnos)                                //Tested!
-    app.post('/api/eliminarTurnos', agenda.eliminarTurnos)                              //Tested!
+    app.post('/api/eliminarTurnos', agenda.eliminarTurnos)                              //Tested! (eliminar si no se usa)
+    app.post('/api/eliminarTurnosById', agenda.eliminarTurnosById)                      //Tested!
+
 }

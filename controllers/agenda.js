@@ -186,14 +186,20 @@ const actualizarJornadas = async (jornada_id) => {
 
     const turnos = await jornada.getTurnos()
 
-    const horarios = turnos.map((turno) => new Date(turno.fecha_inicio))
+    if (turnos.length > 0) {
 
-    horarios.sort((a, b) => a.getTime() - b.getTime())
+        const horarios = turnos.map((turno) => new Date(turno.fecha_inicio))
 
-    const fecha_fin = horarios[horarios.length - 1]
+        horarios.sort((a, b) => a.getTime() - b.getTime())
 
-    jornada.fecha_inicio = horarios[0]
-    jornada.fecha_fin = fecha_fin.setMinutes(fecha_fin.getMinutes() + duracionTurnos)
+        const fecha_fin = horarios[horarios.length - 1]
 
-    await jornada.save()
+        jornada.fecha_inicio = horarios[0]
+        jornada.fecha_fin = fecha_fin.setMinutes(fecha_fin.getMinutes() + duracionTurnos)
+
+
+        await jornada.save()
+    } else {
+        await jornada.destroy()
+    }
 }

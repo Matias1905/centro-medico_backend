@@ -15,6 +15,7 @@ module.exports = (app) => {
 
     app.post('/api/insertarJornada', jornada.create),
     app.get('/api/getJornadas', jornada.list)
+    app.post('/api/eliminarJornada', jornada.eliminarJornada)
 
     app.post('/api/insertarTurno', turno.create),
     app.get('/api/getTurnos', turno.list)

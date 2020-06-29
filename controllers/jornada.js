@@ -33,5 +33,12 @@ module.exports = {
                 [{ model: Turno, as: 'turnos' }, 'fecha_inicio', 'asc']
             ]
         }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
+    },
+
+    eliminarJornada(req, res){
+        return Jornada.findByPk(req.body.jornada_id).then(jornada => 
+            jornada.destroy().then(() => res.sendStatus(200))
+            .catch(err=> res.status(400).send(err)))
+            .catch(err=> res.status(400).send(err))
     }
 }

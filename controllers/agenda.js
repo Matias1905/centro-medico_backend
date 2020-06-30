@@ -30,23 +30,62 @@ function fraccionarHorario(inicio, fin, almuerzo) {
     }
 }
 
-function generarDiasJornada(inicio, fin) {
-    let dias = [];
+const verificarHorario = async (horario, medico_id) => {
+    try {
+        const cond = formatFecha(horario)
 
-    let dInicio = new Date(inicio)
-    let dFin = new Date(fin)
-    let mes = dInicio.getMonth()
+        const jornada = await Jornada.findOne({
+            where: {
+                medico_id: medico_id,
+                fecha_inicio: {
+                    [Op.between]: cond
+                }
+            }
 
-    let d1 = new Date(dInicio)
+        })
 
-    while (dInicio.getMonth() <= mes) {
-        d1 = new Date(dInicio)
-        d2 = new Date(dFin)
-        dias.push({ fecha_inicio: d1, fecha_fin: d2 })
-        dInicio.setDate(dInicio.getDate() + 7)
-        dFin.setDate(dFin.getDate() + 7)
+        if (jornada) {
+            return false;
+        } else {
+            return true;
+        }
+    } catch {
+        return null;
     }
-    return dias
+}
+
+function formatFecha(fecha) {
+    let fechaInicio = new Date(fecha);
+    fechaInicio.setHours(0, 0, 0, 0);
+    let fechaFin = new Date(fecha);
+    fechaFin.setHours(24, 0, 0, 0)
+    return [fechaInicio, fechaFin]
+}
+
+const generarDiasJornada = async (inicio, fin, medico_id) => {
+    try {
+        let dias = [];
+
+        let dInicio = new Date(inicio)
+        let dFin = new Date(fin)
+        let mes = dInicio.getMonth()
+
+        let d1 = new Date(dInicio)
+
+        while (dInicio.getMonth() <= mes) {
+            d1 = new Date(dInicio)
+            d2 = new Date(dFin)
+            const hayJornadas = await verificarHorario(d1, medico_id)
+            if (hayJornadas) {
+                dias.push({ fecha_inicio: d1, fecha_fin: d2 })
+            }
+            dInicio.setDate(dInicio.getDate() + 7)
+            dFin.setDate(dFin.getDate() + 7)
+        }
+        return dias
+    } catch{
+        return []
+    }
 }
 
 module.exports = {
@@ -89,44 +128,49 @@ module.exports = {
 
     generarJornadaPorSemana(req, res) {
 
-        let dias = generarDiasJornada(req.body.fecha_inicio, req.body.fecha_fin);
+        generarDiasJornada(req.body.fecha_inicio, req.body.fecha_fin, req.body.medico_id).then(dias => {
 
-        let jornadas = dias.map((dia) => {
-            return {
-                fecha_inicio: dia.fecha_inicio,
-                fecha_fin: dia.fecha_fin,
-                sede: req.body.sede,
-                medico_id: req.body.medico_id,
-                especialidad_id: req.body.especialidad_id,
-                estado: "disponible"
+            if(dias.length === 0){
+                return res.status(400).send({message: 'No se crearon las jornadas'})
             }
-        })
 
-        Jornada.bulkCreate(jornadas, { returning: true }).then(jornadas => {
-
-            let turnos = []
-
-            jornadas.forEach((jornada) => {
-                let horarios = fraccionarHorario(jornada.fecha_inicio, jornada.fecha_fin);
-
-                let turnosDia = horarios.map((horaIni) => {
-                    let horaFin = new Date(horaIni)
-                    horaFin.setMinutes(horaIni.getMinutes() + duracionTurnos)
-
-                    return {
-                        fecha_inicio: horaIni,
-                        fecha_fin: horaFin,
-                        sede: req.body.sede,
-                        medico_id: req.body.medico_id,
-                        especialidad_id: req.body.especialidad_id,
-                        estado: "disponible",
-                        jornada_id: jornada.id
-                    }
-                })
-                turnos = turnos.concat(turnosDia)
+            let jornadas = dias.map((dia) => {
+                return {
+                    fecha_inicio: dia.fecha_inicio,
+                    fecha_fin: dia.fecha_fin,
+                    sede: req.body.sede,
+                    medico_id: req.body.medico_id,
+                    especialidad_id: req.body.especialidad_id,
+                    estado: "disponible"
+                }
             })
 
-            Turno.bulkCreate(turnos, { returning: true }).then(obj => res.status(201).send(obj)).catch(err => res.status(400).send(err))
+            Jornada.bulkCreate(jornadas, { returning: true }).then(jornadas => {
+
+                let turnos = []
+
+                jornadas.forEach((jornada) => {
+                    let horarios = fraccionarHorario(jornada.fecha_inicio, jornada.fecha_fin);
+
+                    let turnosDia = horarios.map((horaIni) => {
+                        let horaFin = new Date(horaIni)
+                        horaFin.setMinutes(horaIni.getMinutes() + duracionTurnos)
+
+                        return {
+                            fecha_inicio: horaIni,
+                            fecha_fin: horaFin,
+                            sede: req.body.sede,
+                            medico_id: req.body.medico_id,
+                            especialidad_id: req.body.especialidad_id,
+                            estado: "disponible",
+                            jornada_id: jornada.id
+                        }
+                    })
+                    turnos = turnos.concat(turnosDia)
+                })
+
+                Turno.bulkCreate(turnos, { returning: true }).then(obj => res.status(201).send(obj)).catch(err => res.status(400).send(err))
+            }).catch(err => res.status(400).send(err))
         }).catch(err => res.status(400).send(err))
     },
 

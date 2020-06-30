@@ -5,6 +5,7 @@ module.exports = {
         return Usuario.findOrCreate({
             where: {
                 nombre: req.body.nombre,
+                apellido: req.body.apellido,
                 dni: req.body.dni,
                 email: req.body.email,
                 password: req.body.password,

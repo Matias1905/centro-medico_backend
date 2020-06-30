@@ -50,4 +50,7 @@ module.exports = (app) => {
     app.post('/api/eliminarTurnos', agenda.eliminarTurnos)                              //Tested! (eliminar si no se usa)
     app.post('/api/eliminarTurnosById', agenda.eliminarTurnosById)                      //Tested!
 
+
+    app.post('/api/registrarDeuda', paciente.registrarDeuda)
+
 }

@@ -20,7 +20,7 @@ module.exports = {
                 include: {
                     model: Usuario,
                     as: 'datos',
-                    attributes: ['nombre']
+                    attributes: ['apellido', 'nombre']
                 },
                 through: {
                     attributes: []
@@ -28,7 +28,7 @@ module.exports = {
             }],
             order: [
                 ['titulo', 'asc'],
-                [{ model: Medico, as: 'medicos' }, { model: Usuario, as: 'datos' }, 'nombre', 'asc']
+                [{ model: Medico, as: 'medicos' }, { model: Usuario, as: 'datos' }, 'apellido', 'asc']
             ]
         }).then(list => res.status(200).send(list)).catch(err => res.status(400).send(err))
     },
@@ -187,7 +187,7 @@ module.exports = {
             include: {
                 model: Usuario,
                 as: 'datos',
-                attributes: ['id', 'nombre']
+                attributes: ['id', 'apellido', 'nombre']
             }
         }, {
             model: Especialidad,

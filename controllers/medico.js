@@ -75,11 +75,11 @@ module.exports = {
                 include: [{
                     model: Turno,
                     as: 'turnos',
-                    attributes: ['fecha_inicio', 'fecha_fin', 'sede', 'estado']
+                    attributes: ['id', 'fecha_inicio', 'fecha_fin', 'sede', 'estado', 'paciente_id']
                 }, {
                     model: Especialidad,
                     as: 'especialidad',
-                    attributes: ['titulo']
+                    attributes: ['id', 'titulo']
                 }],
                 order: [
                     ['fecha_inicio', 'asc'],

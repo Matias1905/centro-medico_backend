@@ -16,9 +16,11 @@ module.exports = {
                 include: [{
                     model: Medico,
                     as: 'medico',
+                    attributes: ['id'],
                     include: {
                         model: Usuario,
-                        as: 'datos'
+                        as: 'datos',
+                        attributes: ['id', 'nombre', 'apellido', 'genero']
                     }
                 }, {
                     model: Especialidad,
@@ -49,9 +51,11 @@ module.exports = {
                 include: [{
                     model: Medico,
                     as: 'medico',
+                    attributes: ['id'],
                     include: {
                         model: Usuario,
-                        as: 'datos'
+                        as: 'datos',
+                        attributes: ['id', 'nombre', 'apellido', 'genero']
                     }
                 }, {
                     model: Especialidad,

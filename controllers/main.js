@@ -187,7 +187,7 @@ module.exports = {
             include: {
                 model: Usuario,
                 as: 'datos',
-                attributes: ['id', 'apellido', 'nombre']
+                attributes: ['id', 'apellido', 'nombre', 'genero']
             }
         }, {
             model: Especialidad,

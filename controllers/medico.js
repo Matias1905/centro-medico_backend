@@ -1,4 +1,15 @@
+const { Op } = require('sequelize')
 const { Usuario, Medico, Especialidad, Jornada, Turno, Paciente } = require('../models')
+
+
+function formatFecha(fecha) {
+    let fechaInicio = new Date(fecha);
+    fechaInicio.setHours(0, 0, 0, 0);
+    let fechaFin = new Date(fecha);
+    fechaFin.setHours(24, 0, 0, 0)
+    return [fechaInicio, fechaFin]
+}
+
 
 module.exports = {
     create(req, res) {
@@ -71,6 +82,9 @@ module.exports = {
 
     getJornadasMedico(req, res) {
         return Medico.findByPk(req.body.medico_id).then(medico => {
+            if(!medico){
+                return res.status(404).send({message: 'Médico no encontrado'})
+            }
             return medico.getJornadas({
                 include: [{
                     model: Turno,
@@ -105,6 +119,52 @@ module.exports = {
             }).catch(err => res.status(404).send(err))
         }).catch(err => res.status(404).send(err))
     },
+
+    getJornadaDeHoy(req, res){
+        return Medico.findByPk(req.body.medico_id).then(medico => {
+            const [fechaInicio, fechaFin] = formatFecha(new Date());
+            if(!medico){
+                return res.status(404).send({message: 'Médico no encontrado'})
+            }
+            return medico.getJornadas({
+                where: {
+                    fecha_inicio:{
+                        [Op.between]: [fechaInicio, fechaFin]
+                    }
+                },
+                include: [{
+                    model: Turno,
+                    as: 'turnos',
+                    attributes: ['id', 'fecha_inicio', 'fecha_fin', 'sede', 'estado', 'paciente_id'],
+                    include: [
+                        {
+                            model: Paciente,
+                            as: 'paciente',
+                            attributes: ['id', 'obra_social', 'plan', 'os_nro'],
+                            include: [{
+                                model: Usuario,
+                                as: 'datos',
+                                attributes: ['nombre', 'apellido']
+                            }]
+                        }
+                    ]
+                }, {
+                    model: Especialidad,
+                    as: 'especialidad',
+                    attributes: ['id', 'titulo']
+                }],
+                order: [
+                    ['fecha_inicio', 'asc'],
+                    [{ model: Turno, as: 'turnos' }, 'fecha_inicio', 'asc']
+                ]
+            }).then(jornadas => {
+                if (!jornadas) {
+                    return res.status(404).send({ message: 'Ha ocurrido un error' })
+                }
+                return res.status(200).send(jornadas)
+            }).catch(err => res.status(404).send(err))
+        })
+    }
 
 
 }

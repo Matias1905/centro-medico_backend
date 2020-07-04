@@ -53,4 +53,6 @@ module.exports = (app) => {
 
     app.post('/api/registrarDeuda', paciente.registrarDeuda)
 
+    app.post('/api/getJornadaHoy', medico.getJornadaDeHoy)
+
 }

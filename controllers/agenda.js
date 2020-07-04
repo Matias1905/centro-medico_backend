@@ -1,6 +1,5 @@
 const { Op } = require('sequelize')
 const { Jornada, Turno, Medico, Especialidad, Paciente } = require('../models');
-const jornada = require('./jornada');
 
 const duracionTurnos = 30;
 

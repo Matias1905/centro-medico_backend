@@ -1,4 +1,4 @@
-const { Usuario, Medico, Especialidad, Jornada, Turno } = require('../models')
+const { Usuario, Medico, Especialidad, Jornada, Turno, Paciente } = require('../models')
 
 module.exports = {
     create(req, res) {
@@ -75,7 +75,19 @@ module.exports = {
                 include: [{
                     model: Turno,
                     as: 'turnos',
-                    attributes: ['id', 'fecha_inicio', 'fecha_fin', 'sede', 'estado', 'paciente_id']
+                    attributes: ['id', 'fecha_inicio', 'fecha_fin', 'sede', 'estado', 'paciente_id'],
+                    include: [
+                        {
+                            model: Paciente,
+                            as: 'paciente',
+                            attributes: ['id', 'obra_social', 'plan', 'os_nro'],
+                            include: [{
+                                model: Usuario,
+                                as: 'datos',
+                                attributes: ['nombre', 'apellido']
+                            }]
+                        }
+                    ]
                 }, {
                     model: Especialidad,
                     as: 'especialidad',

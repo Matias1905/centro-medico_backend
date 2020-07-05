@@ -13,6 +13,7 @@ module.exports = {
 
     getEspecialidades(req, res) {
         return Especialidad.findAll({
+            attributes: ['id', 'titulo'],
             include: [{
                 model: Medico,
                 as: 'medicos',
@@ -42,6 +43,7 @@ module.exports = {
                 include: [{
                     model: Medico,
                     as: 'medico',
+                    attributes: { exclude: ['lista_espera'] },
                     include: {
                         model: Usuario,
                         as: 'datos'
@@ -137,6 +139,7 @@ module.exports = {
                 include: [{
                     model: Medico,
                     as: 'medico',
+                    attributes: { exclude: ['lista_espera'] },
                     include: {
                         model: Usuario,
                         as: 'datos'
@@ -184,6 +187,7 @@ module.exports = {
         condiciones.include = [{
             model: Medico,
             as: 'medico',
+            attributes: { exclude: ['lista_espera'] },
             include: {
                 model: Usuario,
                 as: 'datos',
@@ -192,7 +196,7 @@ module.exports = {
         }, {
             model: Especialidad,
             as: 'especialidad',
-            attributes: ['titulo']
+            attributes: ['id', 'titulo']
         }]
         condiciones.order = [['fecha_inicio', 'ASC']];
         return Turno.findAll(condiciones).then(list => res.status(200).send(list)).catch(err => res.status(404).send(err))

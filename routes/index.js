@@ -1,4 +1,4 @@
-const { medico, paciente, jornada, turno, main, agenda, usuario, turnospaciente } = require('../controllers')
+const { medico, paciente, jornada, turno, main, agenda, usuario, turnospaciente, especialidad } = require('../controllers')
 
 module.exports = (app) => {
     app.get('/api', (req, res) => {
@@ -52,6 +52,9 @@ module.exports = (app) => {
 
 
     app.post('/api/registrarDeuda', paciente.registrarDeuda)
+
+    app.post('/api/registrarListaDeEsperaEspec', especialidad.registrarListaEspera)
+    app.post('/api/registrarListaDeEsperaMedico', medico.registrarListaEspera)
 
     app.post('/api/getJornadaHoy', medico.getJornadaDeHoy)
 

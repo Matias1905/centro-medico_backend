@@ -30,7 +30,8 @@ module.exports = {
             Medico.create({
                 usuario_id: response[0].dataValues.id,
                 nro_matricula: req.body.nro_matricula,
-                foto_carnet: req.body.foto_carnet
+                foto_carnet: req.body.foto_carnet,
+                lista_espera: []
             }).then(obj => res.status(201).send(obj))
                 .catch(err => res.status(400).send(err))
         }).catch(err => res.status(400).send(err))
@@ -44,6 +45,7 @@ module.exports = {
             }, {
                 model: Especialidad,
                 as: 'especialidades',
+                attributes: { exclude: ['lista_espera'] },
                 through: {
                     attributes: []
                 }
@@ -164,7 +166,41 @@ module.exports = {
                 return res.status(200).send(jornadas)
             }).catch(err => res.status(404).send(err))
         })
+    },
+
+
+    registrarListaEspera(req, res){
+        actualizarArray(req, res)
     }
 
+    
+    
 
+}
+
+const actualizarArray = async (req, res) => {
+    try {
+        const medico = await Medico.findByPk(req.body.medico_id);
+
+
+        if (Array.isArray(medico.lista_espera)) {
+            const array = medico.lista_espera
+            array.push({
+                id: req.body.paciente_id,
+                fecha: new Date()
+            });
+            medico.lista_espera = array;
+        } else {
+            medico.lista_espera = [{
+                id: req.body.paciente_id,
+                fecha: new Date()
+            }]
+        }
+
+        const response = await medico.save();
+
+        return res.status(200).send(response)
+    } catch (e) {
+        return res.status(400).send(e);
+    }
 }

@@ -18,6 +18,7 @@ module.exports = {
             include: [{
                 model: Medico,
                 as: 'medico',
+                attributes: { exclude: ['lista_espera'] },
                 include: [{
                     model: Usuario,
                     as: 'datos'

@@ -2,7 +2,16 @@
 module.exports = (sequelize, DataTypes) => {
   const Medico = sequelize.define('Medico', {
     nro_matricula: DataTypes.STRING,
-    foto_carnet: DataTypes.STRING
+    foto_carnet: DataTypes.STRING,
+    lista_espera: {
+      type: DataTypes.TEXT,
+        get: function() {
+          return JSON.parse(this.getDataValue("lista_espera"));
+        },
+        set: function(value) {
+          return this.setDataValue("lista_espera", JSON.stringify(value));
+        }
+    }
   }, {});
   Medico.associate = function(models) {
     // associations can be defined here

@@ -6,8 +6,9 @@ const main = require('./main')
 const agenda = require('./agenda')
 const usuario = require('./usuario')
 const turnospaciente = require('./turnospaciente')
+const especialidad = require('./especialidad')
 
 
 module.exports= {
-    medico, paciente, jornada, turno, main, agenda, usuario, turnospaciente
+    medico, paciente, jornada, turno, main, agenda, usuario, turnospaciente, especialidad
 }

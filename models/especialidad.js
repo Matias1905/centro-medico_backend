@@ -1,7 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Especialidad = sequelize.define('Especialidad', {
-    titulo: DataTypes.STRING
+    titulo: DataTypes.STRING,
+    lista_espera: {
+      type: DataTypes.TEXT,
+        get: function() {
+          return JSON.parse(this.getDataValue("lista_espera"));
+        },
+        set: function(value) {
+          return this.setDataValue("lista_espera", JSON.stringify(value));
+        }
+    }
   }, {});
   Especialidad.associate = function(models) {
     // associations can be defined here

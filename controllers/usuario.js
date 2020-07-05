@@ -10,9 +10,11 @@ module.exports = {
             include: [{
                 model: Medico,
                 as: 'medico',
+                attributes: { exclude: ['lista_espera'] },
                 include: {
                     model: Especialidad,
                     as: 'especialidades',
+                    attributes: ['id', 'titulo'],
                     through: {
                         attributes: []
                     }
@@ -43,9 +45,11 @@ module.exports = {
             include: [{
                 model: Medico,
                 as: 'medico',
+                attributes: { exclude: ['lista_espera'] },
                 include: {
                     model: Especialidad,
                     as: 'especialidades',
+                    attributes: ['id', 'titulo'],
                     through: {
                         attributes: []
                     }
@@ -79,9 +83,11 @@ module.exports = {
                     include: [{
                         model: Medico,
                         as: 'medico',
+                        attributes: { exclude: ['lista_espera'] },
                         include: {
                             model: Especialidad,
                             as: 'especialidades',
+                            attributes: ['id', 'titulo'],
                             through: {
                                 attributes: []
                             }
